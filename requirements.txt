@@ -1,0 +1,8 @@
+fastapi
+deta
+datetime
+regex
+waybackpy
+jinja2
+starlette
+uvicorn
