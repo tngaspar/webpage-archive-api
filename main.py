@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from deta import Deta
 from datetime import datetime
 from utils.url_inspector import validate_url
-from utils.archive import get_url_archive
+from utils.archive import archive
 from starlette.responses import RedirectResponse
 
 # secrets file:
@@ -22,18 +22,6 @@ deta = Deta(config.deta_private_key)
 db = deta.Base("saved_urls")
 
 
-# call and insert archive
-def _archive(url):
-    try:
-        archive_url = get_url_archive(url)
-        url_records = db.fetch({"url": url})
-        keys = [item["key"] for item in url_records.items]
-        for key in keys:
-            db.update({"archive_url": archive_url}, key)
-    except Exception as ex:
-        print(ex)
-
-
 # Adds a url to lisk of saved urls
 @app.post("/save/{title}/{url:path}")
 async def add_url(title: str, url: str):
@@ -44,7 +32,7 @@ async def add_url(title: str, url: str):
     db.insert({"title": title, "url": url,
                "timestamp": datetime.now().timestamp()})
     # not working due to timeout
-    # _archive(url)
+    # archive(url, db)
     # inserts a note with key as id
     print(f"Url inserted: {title} - {url}")
     return {"message": "url successfully added"}
@@ -90,7 +78,7 @@ async def saveUI(request: Request, title: str, url: str):
     db.insert({"title": title, "url": url,
                "timestamp": datetime.now().timestamp()})
     # not working due to timeout
-    # _archive(url)
+    # archive(url)
     return RedirectResponse("/")
 
 
@@ -99,5 +87,5 @@ async def saveUI(request: Request, title: str, url: str):
 async def archiveUI(request: Request, url: str):
     # insert to the database
     # not working due to timeout
-    _archive(url)
+    archive(url, db)
     return RedirectResponse("/")
