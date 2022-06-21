@@ -30,7 +30,8 @@ deta = Deta(deta_private_key)
 db = deta.Base("saved_urls")
 db_users = deta.Base("users_db")
 
-# # read with cookies
+
+# read with cookies
 @app.get("/", response_class=HTMLResponse)
 async def user_get_all_url(request: Request, token: Optional[str] = Cookie(None)):
     if token is None:

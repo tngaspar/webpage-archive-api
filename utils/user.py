@@ -1,4 +1,3 @@
-from distutils.log import error
 import bcrypt
 from datetime import datetime, timedelta
 from config import db_user_secret_key
