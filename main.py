@@ -10,14 +10,9 @@ from starlette.responses import RedirectResponse
 from starlette import status
 from utils.user import hash_pw, auth_user, validate_token
 
-
-# ## secrets file:
+# secrets file:
 from config import deta_private_key
 
-
-# class Data(BaseModel):
-#    username: str = Form()
-#    password: str
 
 app = FastAPI(
     title="SaveMyPage API",
@@ -45,10 +40,11 @@ async def user_get_all_url(request: Request, token: Optional[str] = Cookie(None)
                 "index.html", {"request": request, "items": all_user_urls.items}
             )
         except Exception:
-            # log not sucessful, token expired
+            # login unsucessful, token expired
             return templates.TemplateResponse("login.html", {"request": request})
 
 
+# authenticates user log in
 @app.post("/auth", response_class=HTMLResponse)
 async def auth(username: str = Form(), password: str = Form()):
     response = RedirectResponse("/", status_code=status.HTTP_302_FOUND)
@@ -61,7 +57,7 @@ async def auth(username: str = Form(), password: str = Form()):
     return response
 
 
-# ## User api calls
+# user signup
 @app.post("/createUser", response_class=HTMLResponse)
 async def createuser(username: str = Form(), password: str = Form()):
     # insert to the database
@@ -87,14 +83,7 @@ async def createuser(username: str = Form(), password: str = Form()):
     return response
 
 
-# get all records in db
-@app.get("/getall")
-async def get_all_url():
-    # fetches all records from db
-    all_urls = db.fetch()
-    return all_urls.items
-
-
+# deletes record
 @app.get("/deleteUI/{key}", response_class=HTMLResponse)
 async def deleteUI(request: Request, key: str, token: Optional[str] = Cookie(None)):
     # fetches all records from db
@@ -106,6 +95,7 @@ async def deleteUI(request: Request, key: str, token: Optional[str] = Cookie(Non
     return RedirectResponse("/")
 
 
+# creates new record
 @app.post("/saveUI", response_class=HTMLResponse)
 async def saveUI(
     request: Request,
@@ -129,14 +119,12 @@ async def saveUI(
                 "username": username,
             }
         )
-    # not working due to timeout
-    # archive(url)
     except Exception as ex:
         print(ex)
     return response
 
 
-# replace with key
+# archive url
 @app.get("/archiveUI/{url:path}", response_class=HTMLResponse)
 async def archiveUI(request: Request, url: str):
     # insert to the database

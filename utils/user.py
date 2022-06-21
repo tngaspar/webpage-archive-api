@@ -7,18 +7,21 @@ import jwt
 algorithm = "HS256"
 
 
+# hashes user_password to be stored in db
 def hash_pw(password):
     hashed_pw = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
     pw_hash = hashed_pw.decode("utf-8")
     return pw_hash
 
 
+# compared password used to login with password hash in db
 def auth_user(username, password, user_in_db):
     try:
         if bcrypt.checkpw(
             password.encode("utf-8"), user_in_db.get("password_hash").encode("utf-8")
         ):
-            access_token_expires = timedelta(minutes=60)
+            # generates access token that expired in 4h
+            access_token_expires = timedelta(hours=4)
             access_token = _create_access_token(
                 data={"username": username}, expires_delta=access_token_expires
             )
