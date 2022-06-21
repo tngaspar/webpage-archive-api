@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request
+from typing import Optional
+from fastapi import FastAPI, Form, Request, Cookie
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from deta import Deta
@@ -6,43 +7,83 @@ from datetime import datetime
 from utils.url_inspector import validate_url
 from utils.archive import archive
 from starlette.responses import RedirectResponse
+from starlette import status
+from utils.user import hash_pw, auth_user, validate_token
 
-# secrets file:
-import config
 
+# ## secrets file:
+from config import deta_private_key
+
+
+# class Data(BaseModel):
+#    username: str = Form()
+#    password: str
 
 app = FastAPI(
     title="SaveMyPage API",
     description="An API so save and archive pages for later access",
 )
 templates = Jinja2Templates(directory="templates")
-deta = Deta(config.deta_private_key)
+deta = Deta(deta_private_key)
 
-# creates saved_urls database
+# creates databases
 db = deta.Base("saved_urls")
+db_users = deta.Base("users_db")
+
+# # read with cookies
+@app.get("/", response_class=HTMLResponse)
+async def user_get_all_url(request: Request, token: Optional[str] = Cookie(None)):
+    if token is None:
+        return templates.TemplateResponse("login.html", {"request": request})
+    else:
+        try:
+            username = validate_token(token, db_users)
+            # fetches all records from db
+            all_user_urls = db.fetch({"username": username})
+            return templates.TemplateResponse(
+                "index.html", {"request": request, "items": all_user_urls.items}
+            )
+        except Exception:
+            # log not sucessful, token expired
+            return templates.TemplateResponse("login.html", {"request": request})
 
 
-# Adds a url to lisk of saved urls
-@app.post("/save/{title}/{url:path}")
-async def add_url(title: str, url: str):
-    # validate url
-    if validate_url(url) is False:
-        return {"message": "url {url} not in format http(s)://website.com"}
+@app.post("/auth", response_class=HTMLResponse)
+async def auth(username: str = Form(), password: str = Form()):
+    response = RedirectResponse("/", status_code=status.HTTP_302_FOUND)
+    # get db_user record
+    user_in_db = db_users.get(username)
+    # auth
+    authenticated, user_token = auth_user(username, password, user_in_db)
+    if authenticated is True:
+        response.set_cookie(key="token", value=user_token)
+    return response
+
+
+# ## User api calls
+@app.post("/createUser", response_class=HTMLResponse)
+async def createuser(username: str = Form(), password: str = Form()):
     # insert to the database
-    db.insert({"title": title, "url": url,
-               "timestamp": datetime.now().timestamp()})
-    # not working due to timeout
-    # archive(url, db)
-    # inserts a note with key as id
-    print(f"Url inserted: {title} - {url}")
-    return {"message": "url successfully added"}
-
-
-# delete route takes the url id to delete the record from db
-@app.delete("/delete/{id}")
-async def delete_url(id: str):
-    db.delete(id)
-    return {"message": f"url with id {id} deleted"}
+    response = RedirectResponse("/", status_code=status.HTTP_302_FOUND)
+    password_hash = hash_pw(password)
+    try:
+        db_users.insert(
+            {
+                "key": username,
+                "password_hash": password_hash,
+                "create_timestamp": datetime.now().timestamp(),
+            }
+        )
+    except Exception:
+        # user already exists
+        return response
+    # auth and redirect
+    user_in_db = db_users.get(username)
+    # auth
+    authenticated, user_token = auth_user(username, password, user_in_db)
+    if authenticated is True:
+        response.set_cookie(key="token", value=user_token)
+    return response
 
 
 # get all records in db
@@ -53,33 +94,45 @@ async def get_all_url():
     return all_urls.items
 
 
-# get all records in db
-@app.get("/", response_class=HTMLResponse)
-async def get_all_url2(request: Request):
-    # fetches all records from db
-    all_urls = db.fetch()
-    return templates.TemplateResponse(
-        "index.html", {"request": request, "items": all_urls.items}
-    )
-
-
 @app.get("/deleteUI/{key}", response_class=HTMLResponse)
-async def deleteUI(request: Request, key: str):
+async def deleteUI(request: Request, key: str, token: Optional[str] = Cookie(None)):
     # fetches all records from db
-    db.delete(key)
+    try:
+        validate_token(token, db_users)
+        db.delete(key)
+    except Exception as ex:
+        print(ex)
     return RedirectResponse("/")
 
 
-@app.get("/saveUI", response_class=HTMLResponse)
-async def saveUI(request: Request, title: str, url: str):
-    if validate_url(url) is False:
-        return {"message": "url {url} not in format http(s)://website.com"}
-    # insert to the database
-    db.insert({"title": title, "url": url,
-               "timestamp": datetime.now().timestamp()})
+@app.post("/saveUI", response_class=HTMLResponse)
+async def saveUI(
+    request: Request,
+    title: str = Form(),
+    url: str = Form(),
+    token: Optional[str] = Cookie(None),
+):
+    # check token:
+    response = RedirectResponse("/", status_code=status.HTTP_302_FOUND)
+    try:
+        username = validate_token(token, db_users)
+        # validate url
+        if validate_url(url) is False:
+            return response
+        # insert to the database
+        db.insert(
+            {
+                "title": title,
+                "url": url,
+                "timestamp": datetime.now().timestamp(),
+                "username": username,
+            }
+        )
     # not working due to timeout
     # archive(url)
-    return RedirectResponse("/")
+    except Exception as ex:
+        print(ex)
+    return response
 
 
 # replace with key
