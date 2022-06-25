@@ -57,11 +57,28 @@ async def auth(username: str = Form(), password: str = Form()):
     return response
 
 
+@app.get("/logout", response_class=HTMLResponse)
+async def logout(token: Optional[str] = Cookie(None)):
+    response = RedirectResponse("/")
+    # valiate token
+    try:
+        validate_token(token, db_users)
+        # removes token cookie
+        response.set_cookie(key="token", value="")
+    except Exception as ex:
+        print(ex)
+    return response
+
+
 # user signup
 @app.post("/createUser", response_class=HTMLResponse)
 async def createuser(username: str = Form(), password: str = Form()):
-    # insert to the database
     response = RedirectResponse("/", status_code=status.HTTP_302_FOUND)
+
+    if len(username) < 6 or len(password) < 8:
+        return response
+
+    # insert to the database
     password_hash = hash_pw(password)
     try:
         db_users.insert(
