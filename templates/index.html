@@ -8,14 +8,33 @@
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
 	<title>My Saved Pages</title>
+    <style>
+        /* Set a style for all buttons */
+        .btn {
+            background-color: rgb(43, 89, 63);
+            color: white;
+            margin-bottom: 3px;
+            border: none;
+            cursor: pointer;
+
+        }
+        /* Add a hover effect for buttons */
+        .btn:hover {
+            opacity: 0.8;
+            background-color: rgb(43, 89, 63);
+        }
+
+    </style>
 </head>
 
-<body style="background-color: rgb(25, 25, 25)">
-    <a href="/logout" class="btn btn-primary">Log Out</a>
+<body style="background-color: rgb(25, 25, 25); width: 100%; padding: 0 4%;">
+
+<a href="/logout" class="btn btn-primary" style="background-color: rgb(131, 46, 36); margin-top: 10px; margin-right: 10px ;position:absolute; top:0; right:0;">Log Out</a>
+
 <div class = "row" style="background-color: rgb(25, 25, 25);">
 
-    <h1 style="text-align:center; margin-top: 0px; margin-bottom: 0px; color:rgb(212, 212, 212);"><strong>My Saved Pages</strong></h1>
-    <h6 style="text-align:center; margin-top: 5px; margin-bottom: 30px; color:rgb(212, 212, 212);">(Alpha) - <a href="https://github.com/tngaspar/webpage-archive-api" style="color: rgb(151, 151, 255);">Source code</a></h6>
+    <h1 style="text-align:center; margin-top: 40px; margin-bottom: 0px; color:rgb(212, 212, 212);"><strong>My Saved Pages</strong></h1>
+    <h6 style="text-align:center; margin-top: 5px; margin-bottom: 40px; color:rgb(212, 212, 212);">(Alpha) - <a href="https://github.com/tngaspar/webpage-archive-api" style="color:rgb(180, 180, 180)">Source code</a></h6>
         <br>
             <div class="col-sm-4">
                 <div class="card" style="margin-bottom: 20px;"> 
@@ -55,7 +74,7 @@
                         {%  if dict.archive_url %}
                             <a href="{{ dict.archive_url }}" class="btn btn-primary" target="_blank">Go to archive</a>
                         {% endif %}
-                        <a href="/deleteUI/{{dict.key}}" class="btn btn-primary">Delete</a>
+                        <a href="/deleteUI/{{dict.key}}" class="btn btn-primary" style="background-color: rgb(131, 46, 36);">Delete</a>
                     </div>
                 </div>
               </div>
