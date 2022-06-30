@@ -34,7 +34,7 @@ Checkout a live demo of the webapp [here](https://webpagearchive.deta.dev/).
 ## Installation
 Clone the repo:
 ```bash
-$ git clone git@github.com:karan/joe.git
+$ git clone https://github.com/tngaspar/webpage-archive-api.git
 ```
 Install dependencies. I advice the use of a [virtual environment](https://docs.python.org/3/library/venv.html) for isolation.
 ```bash
