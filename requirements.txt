@@ -8,5 +8,3 @@ starlette
 uvicorn
 bcrypt
 PyJWT
-python-multipart
-pydantic
