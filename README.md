@@ -22,14 +22,16 @@ Checkout a live demo of the webapp [here](https://webpagearchive.deta.dev/).
 ## Dependencies
 
 * <a href="https://fastapi.tiangolo.com/">FastAPI</a>
-* <a href="https://docs.deta.sh/docs/home/">deta</a>
-* <a href="https://pypi.org/project/regex/">regex</a>
-* <a href="https://akamhy.github.io/waybackpy/">waybackpy</a>
-* <a href="https://palletsprojects.com/p/jinja/">jinja2</a>
-* <a href="https://github.com/encode/starlette">starlette</a>
-* <a href="https://www.uvicorn.org/">uvicorn</a>
-* <a href="https://github.com/pyca/bcrypt/">bcrypt</a>
+* <a href="https://github.com/pyca/bcrypt/">Bcrypt</a>
 * <a href="https://github.com/jpadilla/pyjwt">PyJWT</a>
+* <a href="https://www.uvicorn.org/">Uvicorn</a>
+* <a href="https://palletsprojects.com/p/jinja/">Jinja2</a>
+* <a href="https://github.com/encode/starlette">Starlette</a>
+* <a href="https://docs.deta.sh/docs/home/">Deta</a>
+* <a href="https://pypi.org/project/regex/">Regex</a>
+* <a href="https://akamhy.github.io/waybackpy/">WayBackPy</a>
+* <a href="https://github.com/andrew-d/python-multipart">Python-multipart</a>
+* <a href="https://pydantic-docs.helpmanual.io/">Pydantic</a>
 
 ## Installation
 Clone the repo:
