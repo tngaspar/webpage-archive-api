@@ -1,10 +1,10 @@
-fastapi
+fastapi==0.78.0
 deta
 datetime
 regex
 waybackpy
 jinja2
-starlette
+starlette==0.19.1
 uvicorn
 bcrypt
 PyJWT
