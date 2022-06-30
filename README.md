@@ -19,18 +19,6 @@ Checkout a live demo of the webapp [here](https://webpagearchive.deta.dev/).
 * A new page is saved by filling up the form request on "Save a new page". By clicking save a POST request is sent to the API built with <a href="https://fastapi.tiangolo.com/">FastAPI</a>. The API then validates if the url format is valid and inserts the new webpage on the database.
 * By pressing "Archive" in a saved webpage a call is made to the <a href="https://archive.org/web/">WayBackMachine</a> to archive the url. If successful the "Archive" button will display "Go to archive" and the database record will be updated with the archive url.
 
-## Dependencies
-
-* <a href="https://fastapi.tiangolo.com/">FastAPI</a>
-* <a href="https://docs.deta.sh/docs/home/">deta</a>
-* <a href="https://pypi.org/project/regex/">regex</a>
-* <a href="https://akamhy.github.io/waybackpy/">waybackpy</a>
-* <a href="https://palletsprojects.com/p/jinja/">jinja2</a>
-* <a href="https://github.com/encode/starlette">starlette</a>
-* <a href="https://www.uvicorn.org/">uvicorn</a>
-* <a href="https://github.com/pyca/bcrypt/">bcrypt</a>
-* <a href="https://github.com/jpadilla/pyjwt">PyJWT</a>
-
 ## Installation
 Clone the repo:
 ```bash
@@ -65,4 +53,19 @@ $ deta deploy
 ```
 (assuming steps in [documentation](https://docs.deta.sh/docs/micros/getting_started) were followed previously)
 
+## Requirements
+
+* <a href="https://fastapi.tiangolo.com/">FastAPI</a>
+* <a href="https://github.com/pyca/bcrypt/">Bcrypt</a>
+* <a href="https://github.com/jpadilla/pyjwt">PyJWT</a>
+* <a href="https://www.uvicorn.org/">Uvicorn</a>
+* <a href="https://palletsprojects.com/p/jinja/">Jinja2</a>
+* <a href="https://github.com/encode/starlette">Starlette</a>
+* <a href="https://docs.deta.sh/docs/home/">Deta</a>
+* <a href="https://pypi.org/project/regex/">Regex</a>
+* <a href="https://akamhy.github.io/waybackpy/">WayBackPy</a>
+* <a href="https://github.com/andrew-d/python-multipart">Python-multipart</a>
+* <a href="https://pydantic-docs.helpmanual.io/">Pydantic</a>
+
 <p align="right">(<a href="#top">back to top</a>)</p>
+
