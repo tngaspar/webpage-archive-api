@@ -28,7 +28,7 @@ Install dependencies. I advice the use of a [virtual environment](https://docs.p
 ```bash
 $ pip install -r requirements.txt
 ```
-Create a <a href="https://www.deta.sh/">Deta<a> account. Install deta CLI and create a new project by following the official [documentation](https://docs.deta.sh/docs/micros/getting_started)
+Create a <a href="https://www.deta.sh/">Deta<a> account and install deta Space CLI.
 
 Add a `config.py` file in the project root directory with:
 
@@ -37,7 +37,7 @@ Add a `config.py` file in the project root directory with:
 deta_private_key = '********************************************'
 db_user_secret_key = '********************************************'
 ```
-Get the `deta_private_key` from the Deta dashboard and choose a `db_user_secret_key` (used to generate access tokens).
+Get  `deta_private_key` by creating a collection on Deta Space and choose a `db_user_secret_key` (used to generate access tokens).
 
 The app can now be initiated:
 
@@ -49,9 +49,9 @@ and accessed at `http://localhost:8000/`
 
 ### - On Deta (public):
 ```bash
-$ deta deploy
+$ deta new
+$ deta push
 ```
-(assuming steps in [documentation](https://docs.deta.sh/docs/micros/getting_started) were followed previously)
 
 ## Requirements
 
