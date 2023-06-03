@@ -26,7 +26,7 @@ $ git clone https://github.com/tngaspar/webpage-archive-api.git
 ```
 Install dependencies. I advice the use of a [virtual environment](https://docs.python.org/3/library/venv.html) for isolation.
 ```bash
-$ pip install requirements.txt
+$ pip install -r requirements.txt
 ```
 Create a <a href="https://www.deta.sh/">Deta<a> account. Install deta CLI and create a new project by following the official [documentation](https://docs.deta.sh/docs/micros/getting_started)
 
