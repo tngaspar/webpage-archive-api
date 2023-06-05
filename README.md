@@ -47,11 +47,22 @@ $ uvicorn main:app --reload
 ```
 and accessed at `http://localhost:8000/`
 
-### - On Deta (public):
+### - On Deta:
 ```bash
 $ deta new
 $ deta push
 ```
+This will create an instance of the app only visible to you. 
+If you want to make the app publicly accessible add
+
+```bash
+# Spacefile
+micro:
+    ...
+    public_routes:
+      - "/*"
+```
+to the Spacefile created by the commands above.
 
 ## Requirements
 
